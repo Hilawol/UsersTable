@@ -1,0 +1,88 @@
+*{
+  box-sizing: border-box;
+  margin:0; 
+  padding:0;
+}
+
+html{
+  font-size: 10px;
+}
+
+td,th,tr{
+  border: 3px solid #F5F7F8;
+  border-left: none;
+  border-right: none;
+  padding:0.2rem 1rem;
+}
+
+.usersTable{
+  border-collapse: collapse;
+  line-height: 2rem;
+  font-size: 1.5rem;
+  border: 3px solid #F5F7F8;
+}
+
+.tableContainer{
+  display: flex;
+  justify-content: center;
+}
+
+
+/* --------------------------  Action Icons ---------------------------- */
+
+.fa-user-edit,
+.fa-user-slash,
+.fa-sort-amount-up{
+  position: relative;
+  margin:0 0.5rem;
+  cursor: pointer;
+  color: #747575;
+  opacity: 0.4;
+}
+
+/* Delete icon */
+.fa-user-slash::after{
+  display: none;
+  content:"Delete";
+  position:absolute;
+  top:0;
+  left:2rem;
+  font-size: 1rem;
+  color:rgb(196, 28, 28);
+}
+.fa-user-slash:hover::after{
+  display: block;
+}
+.fa-user-slash:hover{
+  color:rgb(196, 28, 28);
+  opacity: 1;
+}
+
+
+/* Edit icon */
+.fa-user-edit:hover,
+.fa-sort-amount-up:hover
+{
+  opacity: 1;
+}
+.fa-user-edit::after{
+  display: none;
+  content:"Edit";
+  position:absolute;
+  top:0;
+  left:-2.5rem;
+  font-size: 1rem;
+  /* color:rgb(132, 196, 28); */
+}
+.fa-user-edit:hover::after{
+  display: block;
+}
+.fa-user-edit:hover{
+  /* color:rgb(132, 196, 28); */
+}
+
+
+
+
+
+

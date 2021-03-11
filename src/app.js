@@ -39,10 +39,17 @@ class UsersTable {
       this.users[index] = user;
     }
   }
+  getAllUsers() {
+    return this.users;
+  }
+  setAllUsers(users) {
+    this.users = users;
+  }
 }
 
 let usersTable = new UsersTable();
 const basicUrl = "https://appleseed-wa.herokuapp.com/api/users/";
+const usersTableElement = document.querySelector(".usersTable");
 
 async function fetchAllUseresData() {
   try {
@@ -80,20 +87,63 @@ async function setUserSpecificData() {
   }
 }
 
-//SETUP
+function generateTableHeader() {
+  const tableHead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  headerRow.innerHTML = `<th>ID</th>
+  <th>First Name <i class="fas fa-sort-amount-up"></i></th>
+  <th>Last Name <i class="fas fa-sort-amount-up"></i></th>
+  <th>Capsule <i class="fas fa-sort-amount-up"></i></th>
+  <th>Age <i class="fas fa-sort-amount-up"></i></th>
+  <th>City <i class="fas fa-sort-amount-up"></i></th>
+  <th>Gender <i class="fas fa-sort-amount-up"></i></th>
+  <th>Hobby <i class="fas fa-sort-amount-up"></i></th>
+  <th>Action</th>`
+  tableHead.appendChild(headerRow);
+  usersTableElement.appendChild(tableHead);
+}
+
+function generateTable(userArray) {
+  generateTableHeader();
+  userArray.forEach(user => {
+    const row = document.createElement("tr");
+    row.innerHTML = `   <td>${user.id}</td>
+    <td>${user.firstName}</td>
+    <td>${user.lastName}</td>
+    <td>${user.capsule}</td>
+    <td>${user.age}</td>
+    <td>${user.city}</td>
+    <td>${user.gender.toUpperCase()}</td>
+    <td>${user.hobby}</td>
+    <td><i id="rigthBtn "class="fas fa-user-edit"></i></i>
+    <i id="rigthBtn" class="fas fa-user-slash"></i> </td>`;
+    usersTableElement.appendChild(row);
+  })
+
+
+  // save:<i class="fas fa-user-check"></i>
+  // <i class="fas fa-sort-amount-down-alt"></i>
+  // <i class="fas fa-sort-amount-up"></i>
+
+}
+
+//SETUP - FIRST EXCUTED FUNCTION
 async function setUp() {
 
   const localStorageValue = localStorage.getItem("usersTable"); //Looks for saved local storage
   if (localStorageValue) {
     console.log("found useres in storage");
-    usersTable = JSON.parse(localStorageValue);//Local storage exsits. Sets the data in the object
+    const users = JSON.parse(localStorageValue);
+    usersTable.setAllUsers(users); //Local storage exsits. Sets the data in the object
+    // console.log(usersTable.getAllUsers());
   }
   else {//Local storage does not exists.
     console.log(" did NOT found useres in storage");
     const usersData = await fetchAllUseresData(); //fetch the data
     setAllUsersData(usersData);
     await setUserSpecificData();
-    localStorage.setItem("usersTable", JSON.stringify(usersTable));//sets the data in the local storage.
+    localStorage.setItem("usersTable", JSON.stringify(usersTable.getAllUsers()));//sets the data in the local storage.
   }
-  console.log(usersTable);
+  // console.log(usersTable.getAllUsers());
+  generateTable(usersTable.getAllUsers());
 }
