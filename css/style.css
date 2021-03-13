@@ -20,6 +20,7 @@ td,th,tr{
   line-height: 2rem;
   font-size: 1.5rem;
   border: 3px solid #F5F7F8;
+  width:80vw;
 }
 
 .tableContainer{
@@ -32,7 +33,10 @@ td,th,tr{
 
 .fa-user-edit,
 .fa-user-slash,
-.fa-sort-amount-up{
+.fa-sort-amount-down-alt,
+.fa-undo,
+.fa-user-check
+{
   position: relative;
   margin:0 0.5rem;
   cursor: pointer;
@@ -61,7 +65,7 @@ td,th,tr{
 
 /* Edit icon */
 .fa-user-edit:hover,
-.fa-sort-amount-up:hover
+.fa-sort-amount-down-alt:hover
 {
   opacity: 1;
 }
@@ -77,12 +81,36 @@ td,th,tr{
 .fa-user-edit:hover::after{
   display: block;
 }
-.fa-user-edit:hover{
-  /* color:rgb(132, 196, 28); */
+.fa-undo{ 
+  color:rgb(196, 28, 28);
+  opacity: 0.5;
 }
 
+.fa-undo:hover{
+  opacity: 1;
+}
 
+.fa-user-check{
+   color:rgb(132, 196, 28);
+   opacity: 0.5;
+}
 
+.fa-user-check:hover{
+  opacity: 1;
+}
+.selectedSort{
+  opacity: 1;
+}
+
+.selectedRow{
+  background-color: rgb(252, 231, 205);
+}
+ input{
+   width:100%;
+ }
+ .disableAction{
+   pointer-events: none;
+ }
 
 
 
