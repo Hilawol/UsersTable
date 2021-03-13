@@ -145,5 +145,30 @@ legend{
    display: none;
  }
 
+ .city{
+   position: relative;
+ }
+.city:hover::after{
+  display: block;
+ 
+}
+.city::after{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  content:attr(data-weather);
+  top:0;
+  right:3rem;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: url("/images.png") no-repeat center center/cover;
+  background-color:rgba(0, 0, 0, 0.2);
+  display: none;
+  text-align:center;
+}
+
 
 

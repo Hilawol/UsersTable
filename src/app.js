@@ -67,6 +67,7 @@ const searchInput = document.querySelector(".searchInput");
 searchInput.addEventListener("input", searchUser);
 const searchCategory = document.querySelector("#searchCategories");
 searchCategory.addEventListener("change", searchUser);
+// let weather = {};
 
 //SETUP - FIRST EXCUTED FUNCTION
 async function setUp() {
@@ -84,6 +85,8 @@ async function setUp() {
   generateTableHeader();
   generateTableBody();
   generateTable(usersTable.getAllUsers());
+  setWeather();
+  // await fetchWheather();
 }
 
 //DATA HANDELING
@@ -105,6 +108,20 @@ async function fetchUserSpecificData(userId) {
     console.log("err:", err);
   }
 }
+async function fetchWheather(city) {
+  const apiKey = "appid=3b9f68ff1965ba8493c91f9403e87803";
+  const baseUrl = "https://api.openweathermap.org/data/2.5/weather?q=";
+  const units = "units=metric";
+  const request = [baseUrl + city, units, apiKey];
+  try {
+    const response = await fetch(request.join("&"));
+    const weatherData = await response.json();
+    return weatherData.main.temp;
+  } catch (err) {
+    console.log(err);
+    return "n/a";
+  }
+}
 async function setAllUsersData() {
   console.log("setAllusers starts:", usersTable.users);
   const usersData = await fetchAllUseresData();
@@ -119,6 +136,15 @@ async function setAllUsersData() {
     usersTable.addUser(usersData[i]);
   }
   console.log("setAllusers ends:", usersTable.users);
+}
+async function setWeather() {
+  const cities = usersTable.getAllUsers();
+  const temp = await fetchWheather("netanya");
+  const rows = Array.from(document.querySelectorAll('[data-id]'));
+  for (let i = 0; i < rows.length; i++) {
+    const w = await fetchWheather(rows[i].children[5].textContent);
+    rows[i].children[5].dataset.weather = w + '℃';
+  }
 }
 
 //TABLE ACTION HANDELING
@@ -209,7 +235,7 @@ function generateTable(userArray) {
     <td>${user.lastName}</td>
     <td>${user.capsule}</td>
     <td>${user.age}</td>
-    <td>${user.city}</td>
+    <td class="city" data-weather="">${user.city}</td>
     <td>${user.gender.toUpperCase()}</td>
     <td>${user.hobby}</td>
     <td class="action"><i class="fas fa-user-edit lBtn"></i></i>
@@ -234,6 +260,9 @@ function addBtnsEvents() {
 
   const sortBtns = document.querySelectorAll(".sortBtn");
   addEvent(sortBtns, "click", clickOnSort);
+
+  const cities = document.querySelectorAll(".city");
+  addEvent(cities, "mouseover", hoverCity);
 }
 function getParentRow(event) {
   return event.currentTarget.parentElement.parentElement;
@@ -277,12 +306,12 @@ function removeHidden() {
   hidden.forEach(row => row.classList.remove("hidden"));
 }
 
-
 //EVENT LISTENERS
 function clickOnSort(event) {
   setSelected(event.currentTarget, "selectedSort");
   const category = parseCategory(event.currentTarget.parentElement.textContent);
   generateTable(usersTable.sortUsers(category));
+  setWeather();
 }
 
 function clickOnEditOrCancle(event) {
@@ -313,4 +342,9 @@ function searchUser(event) {
     const usersToHide = usersTable.users.filter(user => (!(user[category]).toString().toLowerCase().includes(searchInput.value.toLowerCase())));
     hideUsers(usersToHide);
   }
+}
+
+function hoverCity(event) {
+  console.log(event.currentTarget.textContent);
+  // event.currentTarget.classList.add("weather");
 }
