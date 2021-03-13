@@ -31,7 +31,6 @@ class UsersTable {
     this.users = users;
   }
   sortUsers(category) {
-    console.log(category);
     switch (category) {
       case "id":
       case "age":
@@ -49,10 +48,8 @@ class UsersTable {
   }
   setCurrentRowHtml(html) {
     this.currentRowHtml = html;
-    console.log("setting current:", html);
   }
   getCurrentRowHTML() {
-    console.log("returning:", this.currentRowHtml);
     return this.currentRowHtml;
   }
   searchUser(category, value) {
@@ -67,18 +64,16 @@ const searchInput = document.querySelector(".searchInput");
 searchInput.addEventListener("input", searchUser);
 const searchCategory = document.querySelector("#searchCategories");
 searchCategory.addEventListener("change", searchUser);
-// let weather = {};
 
 //SETUP - FIRST EXCUTED FUNCTION
 async function setUp() {
+  usersTableElement.classList.add("spinner");
   const localStorageValue = localStorage.getItem("usersTable"); //Looks for saved local storage
   if (localStorageValue) {
-    console.log("found useres in storage");
     const users = JSON.parse(localStorageValue);
     usersTable.setAllUsers(users); //Local storage exsits. Sets the data in the object
   }
   else {//Local storage does not exists.
-    console.log(" did NOT find useres in storage");
     await setAllUsersData();
     localStorage.setItem("usersTable", JSON.stringify(usersTable.getAllUsers()));//sets the data in the local storage.
   }
@@ -86,7 +81,7 @@ async function setUp() {
   generateTableBody();
   generateTable(usersTable.getAllUsers());
   setWeather();
-  // await fetchWheather();
+  usersTableElement.classList.remove("spinner");
 }
 
 //DATA HANDELING
@@ -96,7 +91,7 @@ async function fetchAllUseresData() {
     const data = await response.json();
     return data;
   } catch (err) {
-    console.log("err:", err);
+    console.log(err);
   }
 }
 async function fetchUserSpecificData(userId) {
@@ -105,7 +100,7 @@ async function fetchUserSpecificData(userId) {
     const userData = await response.json();
     return userData;
   } catch (err) {
-    console.log("err:", err);
+    console.log(err);
   }
 }
 async function fetchWheather(city) {
@@ -118,14 +113,11 @@ async function fetchWheather(city) {
     const weatherData = await response.json();
     return weatherData.main.temp;
   } catch (err) {
-    console.log(err);
     return "n/a";
   }
 }
 async function setAllUsersData() {
-  console.log("setAllusers starts:", usersTable.users);
   const usersData = await fetchAllUseresData();
-  console.log(usersData.length);
   for (let i = 0; i < usersData.length; i++) {
     const userAdditionalData = await fetchUserSpecificData(usersData[i].id);
     for (const [key, value] of Object.entries(userAdditionalData)) {
@@ -135,21 +127,19 @@ async function setAllUsersData() {
     }
     usersTable.addUser(usersData[i]);
   }
-  console.log("setAllusers ends:", usersTable.users);
 }
 async function setWeather() {
   const cities = usersTable.getAllUsers();
-  const temp = await fetchWheather("netanya");
   const rows = Array.from(document.querySelectorAll('[data-id]'));
   for (let i = 0; i < rows.length; i++) {
     const w = await fetchWheather(rows[i].children[5].textContent);
     rows[i].children[5].dataset.weather = w + '℃';
   }
 }
+setInterval(setWeather, 600000);//will update the weather every 10 minutes  
 
 //TABLE ACTION HANDELING
 function editRow(currentRow) {
-  console.log("edit");
   setSelected(currentRow, "selectedRow");
   const id = currentRow.dataset.id;
   const userData = usersTable.getUser(id);
@@ -165,13 +155,11 @@ function cancleEdit(currentRow) {
   finishEdit(currentRow);
 }
 function deleteRow(currentRow) {
-  console.log("delete row");
-  usersTable.deleteUser(getParentRow(event).dataset.id);
+  usersTable.deleteUser(currentRow.dataset.id);
   updateLocalStorage();
   currentRow.remove();
 }
 function saveEdit(currentRow) {
-  console.log("save edit");
   const newUserData = {
     id: currentRow.dataset.id,
     firstName: currentRow.children[1].firstElementChild.value,
@@ -183,7 +171,6 @@ function saveEdit(currentRow) {
     hobby: currentRow.children[7].firstElementChild.value
   };
   usersTable.editUser(newUserData);
-  console.log(usersTable.getUser(newUserData.id));
   updateLocalStorage();
   finishEdit(currentRow);
 }
@@ -198,7 +185,6 @@ function finishEdit(currentRow) {
   removeSelectedRow(currentRow);
 }
 function hideUsers(users) {
-  console.log("useres to delete:", users);
   const tableRows = Array.from(document.querySelectorAll('[data-id]'));//Select all rows with data-id (everything but the header row)
   users.forEach(user => {
     (tableRows.find(row => row.dataset.id == user.id)).classList.add("hidden");
@@ -261,8 +247,6 @@ function addBtnsEvents() {
   const sortBtns = document.querySelectorAll(".sortBtn");
   addEvent(sortBtns, "click", clickOnSort);
 
-  const cities = document.querySelectorAll(".city");
-  addEvent(cities, "mouseover", hoverCity);
 }
 function getParentRow(event) {
   return event.currentTarget.parentElement.parentElement;
@@ -335,16 +319,10 @@ function clickOnDeleteOrConfirm(event) {
 }
 
 function searchUser(event) {
-  console.log("search");
   removeHidden();
   if (event.currentTarget.value != "") {
     const category = searchCategory.value;
     const usersToHide = usersTable.users.filter(user => (!(user[category]).toString().toLowerCase().includes(searchInput.value.toLowerCase())));
     hideUsers(usersToHide);
   }
-}
-
-function hoverCity(event) {
-  console.log(event.currentTarget.textContent);
-  // event.currentTarget.classList.add("weather");
 }

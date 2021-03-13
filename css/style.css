@@ -10,14 +10,21 @@ html{
 }
 
 body{
-  background-color: #EEEEEE;
+  background-color: #f5f5f8;
 }
 
 td,th,tr{
+  text-align: center;
   border: 3px solid #F5F7F8;
   border-left: none;
   border-right: none;
-  padding:0.2rem 1rem;
+  height:3rem;
+  padding:0.2rem 0.5rem;
+}
+
+th{
+  background-color:#e6ebee;
+  height: 4rem;
 }
 .searchDiv{
   margin:auto;
@@ -27,26 +34,27 @@ td,th,tr{
   height:100%;
   width:100%;
 }
-fieldset{
-  width:80vw;
-}
-legend{
-  font-size: 2rem;
-}
+
 .searchInput{
+  border:2px solid #d5d7d7;
+  border-radius: 3px;
   height: 3rem;
   margin: 1rem;
-  width:50%;
+  padding:1rem;
+  width:50rem;
   font-size: 1.5rem;
 }
 #searchCategories{
+  border:2px solid #d5d7d7;
+  border-radius: 3px;
   height: 3rem;
+  margin: 1rem;
   font-size: 1.5rem;
 }
 .usersTable{
   background-color: white;
   border-collapse: collapse;
-  line-height: 2rem;
+  line-height: 1.5rem;
   font-size: 1.5rem;
   border: 3px solid #F5F7F8;
   width:80vw;
@@ -105,7 +113,6 @@ legend{
   top:0;
   left:-2.5rem;
   font-size: 1rem;
-  /* color:rgb(132, 196, 28); */
 }
 .fa-user-edit:hover::after{
   display: block;
@@ -132,7 +139,7 @@ legend{
 }
 
 .selectedRow{
-  background-color: rgb(252, 231, 205);
+  background-color:#cee4e4;
 }
  input{
    width:100%;
@@ -154,21 +161,16 @@ legend{
 }
 .city::after{
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   content:attr(data-weather);
   top:0;
-  right:3rem;
+  right:1rem;
   width: 3rem;
   height: 3rem;
   font-size: 1.5rem;
   font-weight: bold;
   background: url("/images.png") no-repeat center center/cover;
-  background-color:rgba(0, 0, 0, 0.2);
   display: none;
   text-align:center;
 }
-
 
 
