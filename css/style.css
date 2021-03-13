@@ -26,6 +26,9 @@ th{
   background-color:#e6ebee;
   height: 4rem;
 }
+tr:hover{
+  background-color: #e6ebee;
+}
 .searchDiv{
   margin:auto;
   display: flex;
@@ -139,10 +142,10 @@ th{
 }
 
 .selectedRow{
-  background-color:#cee4e4;
+  background-color:#e6ebee;
 }
  input{
-   width:100%;
+   width:10rem;
  }
  .disableAction{
    pointer-events: none;
