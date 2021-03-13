@@ -2,10 +2,15 @@
   box-sizing: border-box;
   margin:0; 
   padding:0;
+  outline: none;
 }
 
 html{
   font-size: 10px;
+}
+
+body{
+  background-color: #EEEEEE;
 }
 
 td,th,tr{
@@ -14,8 +19,32 @@ td,th,tr{
   border-right: none;
   padding:0.2rem 1rem;
 }
-
+.searchDiv{
+  margin:auto;
+  display: flex;
+  justify-content: center;
+  margin:2rem 0;
+  height:100%;
+  width:100%;
+}
+fieldset{
+  width:80vw;
+}
+legend{
+  font-size: 2rem;
+}
+.searchInput{
+  height: 3rem;
+  margin: 1rem;
+  width:50%;
+  font-size: 1.5rem;
+}
+#searchCategories{
+  height: 3rem;
+  font-size: 1.5rem;
+}
 .usersTable{
+  background-color: white;
   border-collapse: collapse;
   line-height: 2rem;
   font-size: 1.5rem;
@@ -110,6 +139,10 @@ td,th,tr{
  }
  .disableAction{
    pointer-events: none;
+ }
+
+ .hidden{
+   display: none;
  }
 
 

@@ -55,11 +55,18 @@ class UsersTable {
     console.log("returning:", this.currentRowHtml);
     return this.currentRowHtml;
   }
+  searchUser(category, value) {
+    return this.users.filter(user => (!(user[category]).toString().toLowerCase().includes(value.toLowerCase())));
+  }
 }
 let usersTable = new UsersTable();
 const basicUrl = "https://appleseed-wa.herokuapp.com/api/users/";
 const usersTableElement = document.querySelector(".usersTable");
 let selectedRowHtml;
+const searchInput = document.querySelector(".searchInput");
+searchInput.addEventListener("input", searchUser);
+const searchCategory = document.querySelector("#searchCategories");
+searchCategory.addEventListener("change", searchUser);
 
 //SETUP - FIRST EXCUTED FUNCTION
 async function setUp() {
@@ -164,6 +171,13 @@ function finishEdit(currentRow) {
   changeIcons(currentRow.lastElementChild.lastElementChild, "fa-user-check", "fa-user-slash");//change button from confirm to delete 
   removeSelectedRow(currentRow);
 }
+function hideUsers(users) {
+  console.log("useres to delete:", users);
+  const tableRows = Array.from(document.querySelectorAll('[data-id]'));//Select all rows with data-id (everything but the header row)
+  users.forEach(user => {
+    (tableRows.find(row => row.dataset.id == user.id)).classList.add("hidden");
+  });
+}
 
 //TABLE GENERATION
 function generateTableHeader() {
@@ -258,6 +272,10 @@ function changeIcons(element, remove, add) {
   element.classList.remove(remove);
   element.classList.add(add);
 }
+function removeHidden() {
+  const hidden = document.querySelectorAll(".hidden");
+  hidden.forEach(row => row.classList.remove("hidden"));
+}
 
 
 //EVENT LISTENERS
@@ -284,5 +302,15 @@ function clickOnDeleteOrConfirm(event) {
   }
   else {//User clicked Edit
     deleteRow(currentRow);
+  }
+}
+
+function searchUser(event) {
+  console.log("search");
+  removeHidden();
+  if (event.currentTarget.value != "") {
+    const category = searchCategory.value;
+    const usersToHide = usersTable.users.filter(user => (!(user[category]).toString().toLowerCase().includes(searchInput.value.toLowerCase())));
+    hideUsers(usersToHide);
   }
 }
